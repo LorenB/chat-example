@@ -18,7 +18,12 @@ io.on('connection', function(socket){
   });
   
   socket.on('userReg', function(msg) {
-      users.push(JSON.parse(msg));
+      // console.log(msg);
+      var user = JSON.parse(msg);
+      users.push(user);
+      var userEntered = {'userId': user.Id};
+      userEntered.msg = user.username + " entered the room";
+      io.emit('userEntered', JSON.stringify(userEntered) );
       console.log(users);
   });
 });

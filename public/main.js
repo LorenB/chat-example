@@ -5,7 +5,7 @@ $(document).ready(function () {
     user.joinedAt = Date.now();
     user.Id = user.joinedAt;
     var firstMsg = '';
-    socket.emit('userReg', JSON.stringify(user));
+    
     $('form').submit(function(){
       socket.emit('chat message', $('#m').val());
       firstMsg = JSON.stringify({"isFirstMsg": isFirstMsg, "userId": user.Id})
@@ -19,4 +19,14 @@ $(document).ready(function () {
     socket.on('chat message', function(msg){
       $('#messages').append($('<li>').text(msg));
     });
+    socket.on('userEntered', function(msg) {
+      var userEntered = JSON.parse(msg);
+      if (userEntered.userId !== user.Id) {
+        alert(userEntered.msg);
+      }
+    });
+    
+    user.username = prompt("please choose a user name:");
+    socket.emit('userReg', JSON.stringify(user));
+    
 });
