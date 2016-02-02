@@ -10,6 +10,10 @@ io.on('connection', function(socket){
   socket.on('chat message', function(msg){
     io.emit('chat message', msg);
   });
+  socket.on('firstMsg', function(msg) {
+      var firstMsg = JSON.parse(msg);
+      console.log(firstMsg);
+  });
 });
 
 http.listen(8080, function(){
