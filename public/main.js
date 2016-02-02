@@ -22,7 +22,8 @@ $(document).ready(function () {
     socket.on('userEntered', function(msg) {
       var userEntered = JSON.parse(msg);
       if (userEntered.userId !== user.Id) {
-        alert(userEntered.msg);
+        console.log(userEntered.msg);
+        console.log(userEntered.currnetUsers);
       }
     });
     
