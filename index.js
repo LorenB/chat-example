@@ -9,6 +9,7 @@ app.use(express.static('public'));
 var users = [];
 
 io.on('connection', function(socket){
+  console.log(socket);
   socket.on('chat message', function(msg){
     io.emit('chat message', msg);
   });
@@ -21,7 +22,7 @@ io.on('connection', function(socket){
       var user = JSON.parse(msg);
       users.push(user);
       var userEntered = {'userId': user.Id};
-      userEntered.currnetUsers = users;
+      userEntered.currentUsers = users;
       userEntered.msg = user.username + " entered the room";
       io.emit('userEntered', JSON.stringify(userEntered) );
       console.log(users);

@@ -23,7 +23,7 @@ $(document).ready(function () {
       var userEntered = JSON.parse(msg);
       if (userEntered.userId !== user.Id) {
         console.log(userEntered.msg);
-        console.log(userEntered.currnetUsers);
+        console.log(userEntered.currentUsers);
       }
     });
     
