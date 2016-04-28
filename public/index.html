@@ -21,7 +21,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="A chat application.">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <title>Material Design Lite</title>
+    <title>Chat App</title>
 
     <!-- Add to homescreen for Chrome on Android -->
     <meta name="mobile-web-app-capable" content="yes">
@@ -48,17 +48,6 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://code.getmdl.io/1.1.3/material.cyan-light_blue.min.css">
     <link rel="stylesheet" href="styles.css">
-    <style>
-    #view-source {
-      position: fixed;
-      display: block;
-      right: 0;
-      bottom: 0;
-      margin-right: 40px;
-      margin-bottom: 40px;
-      z-index: 900;
-    }
-    </style>
   </head>
   <body>
     <div class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
@@ -66,9 +55,9 @@
         <div class="mdl-layout__header-row">
           <div class="mdl-layout-spacer" style="width: 30px;"></div>
           <div style="width: 100%" >
-            <form action="" >
+            <form action="" name="chat-form">
               <input id="m" class="" type="text" autocomplete="off" style="width: 85%; height: 30px; font-size: 14px;"/>
-              <button class="mdl-button mdl-js-button mdl-button--raised" style=" margin-left: 5px;">
+              <button id="chat-send" class="mdl-button mdl-js-button mdl-button--raised" style=" margin-left: 5px;">
               Send
               </button>
             </form>            
@@ -85,19 +74,14 @@
       </header>
       <div class="demo-drawer mdl-layout__drawer mdl-color--blue-grey-900 mdl-color-text--blue-grey-50">
         <header class="demo-drawer-header">
-          <div class="demo-avatar-dropdown">
-            <span>hello@example.com</span>
-            <div class="mdl-layout-spacer"></div>
-            <button id="accbtn" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
-              <i class="material-icons" role="presentation">arrow_drop_down</i>
-              <span class="visuallyhidden">Accounts</span>
-            </button>
-            <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="accbtn">
-              <li class="mdl-menu__item">hello@example.com</li>
-              <li class="mdl-menu__item">info@example.com</li>
-              <li class="mdl-menu__item"><i class="material-icons">add</i>Add another account...</li>
-            </ul>
-          </div>
+          <div><span>username</span></div>
+          <form action="" name="user-form">
+            <div class="mdl-textfield mdl-js-textfield">
+              <input class="mdl-textfield__input" type="text" id="username-input">
+              <label class="mdl-textfield__label" for="username-input">name...</label>
+            </div>
+          </form>
+
         </header>
         <nav class="demo-navigation mdl-navigation mdl-color--blue-grey-800">
           
@@ -108,8 +92,7 @@
       </div>
  <main class="mdl-layout__content mdl-color--grey-100">
         <div class="mdl-grid demo-content" id="messages">
-            <div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid">TEST MESSAGE</div>
-            <div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid">TEST MESSAGE2</div>
+            <div id="login-help-text"><p>Please choose a username to begin chatting.</p></div>
      
         </div>
       </main>

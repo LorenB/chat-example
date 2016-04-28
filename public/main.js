@@ -6,7 +6,24 @@ $(document).ready(function () {
     user.Id = user.joinedAt;
     var firstMsg = '';
     
-    $('form').submit(function(){
+    $('#m').attr('readonly', 'readonly');
+    $('#chat-send').attr('disabled', 'disabled');
+    
+    
+    $('form[name="user-form"]').submit(function(){
+      console.log('user form submitted');
+      user.username = $('#username-input').val();
+      socket.emit('userReg', JSON.stringify(user));
+      
+      $('#m').removeAttr( 'readonly' );
+      $('#chat-send').removeAttr('disabled');
+      $('#m').focus();
+      $('#login-help-text').addClass('obsolete');
+      $('#username-input').attr('disabled', 'disabled');
+      return false;
+    });
+  
+    $('form[name="chat-form"]').submit(function () {  
       console.log('form submitted');
       socket.emit('chat message', $('#m').val());
       firstMsg = JSON.stringify({"isFirstMsg": isFirstMsg, "userId": user.Id})
@@ -18,8 +35,11 @@ $(document).ready(function () {
       return false;
     });
     socket.on('chat message', function(msg){
-      $('#messages').append($('<div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid">').text(msg));
-      // $('#messages').append($('<li>').text(msg));
+      var chatMainDiv = $('<div>').attr('class','mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid');
+      var chatTextDiv = $('<div>').attr('class', 'chat-msg-text').append($('<span>').text(msg));
+      var chatMetaDiv = $('<div>').attr('class', 'chat-msg-meta').append($('<span>').text(user.username));
+      chatMainDiv.append([chatTextDiv, chatMetaDiv]);
+      $('#messages').append(chatMainDiv);
     });
     socket.on('userEntered', function(msg) {
       var userEntered = JSON.parse(msg);
@@ -29,7 +49,6 @@ $(document).ready(function () {
       }
     });
     
-    user.username = prompt("please choose a user name:");
-    socket.emit('userReg', JSON.stringify(user));
+    
     
 });
