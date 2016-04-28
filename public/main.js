@@ -7,6 +7,7 @@ $(document).ready(function () {
     var firstMsg = '';
     
     $('form').submit(function(){
+      console.log('form submitted');
       socket.emit('chat message', $('#m').val());
       firstMsg = JSON.stringify({"isFirstMsg": isFirstMsg, "userId": user.Id})
       if(isFirstMsg){
@@ -17,7 +18,8 @@ $(document).ready(function () {
       return false;
     });
     socket.on('chat message', function(msg){
-      $('#messages').append($('<li>').text(msg));
+      $('#messages').append($('<div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid">').text(msg));
+      // $('#messages').append($('<li>').text(msg));
     });
     socket.on('userEntered', function(msg) {
       var userEntered = JSON.parse(msg);
