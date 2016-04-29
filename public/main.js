@@ -6,12 +6,12 @@ $(document).ready(function () {
     user.Id = user.joinedAt;
     var firstMsg = '';
     
+
     $('#m').attr('readonly', 'readonly');
     $('#chat-send').attr('disabled', 'disabled');
     
     
     $('form[name="user-form"]').submit(function(){
-      console.log('user form submitted');
       user.username = $('#username-input').val();
       socket.emit('userReg', JSON.stringify(user));
       
@@ -24,7 +24,6 @@ $(document).ready(function () {
     });
   
     $('form[name="chat-form"]').submit(function () {  
-      console.log('form submitted');
       socket.emit('chat message', $('#m').val());
       firstMsg = JSON.stringify({"isFirstMsg": isFirstMsg, "userId": user.Id})
       if(isFirstMsg){
@@ -35,20 +34,55 @@ $(document).ready(function () {
       return false;
     });
     socket.on('chat message', function(msg){
-      var chatMainDiv = $('<div>').attr('class','mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid');
-      var chatTextDiv = $('<div>').attr('class', 'chat-msg-text').append($('<span>').text(msg));
-      var chatMetaDiv = $('<div>').attr('class', 'chat-msg-meta').append($('<span>').text(user.username));
-      chatMainDiv.append([chatTextDiv, chatMetaDiv]);
-      $('#messages').append(chatMainDiv);
-    });
-    socket.on('userEntered', function(msg) {
-      var userEntered = JSON.parse(msg);
-      if (userEntered.userId !== user.Id) {
-        console.log(userEntered.msg);
-        console.log(userEntered.currentUsers);
+      if(user.username){
+        appendMessageElem(msg, user);
       }
     });
+    socket.on('userEntered', function(msg) {
+      // if the user is logged in (selected a username) present new info
+      if(user.username){
+        $('.users-list').empty();
+        var userElem;
+        var userEntered = JSON.parse(msg);
+        updateUserList(userEntered);
+        
+        if (userEntered.userId !== user.Id) {
+          appendMessageElem(userEntered.text);
+        }        
+      }
+    });
+    socket.on('userLeft', function(msg) {
+      if(user.username){
+        console.log(msg);
+        appendMessageElem(msg.text);
+        updateUserList(msg);
+      }
+    });
+    function updateUserList(msgObj){
+      $('.users-list').empty();
+      var userElem;
+      for(var userIndex=0; userIndex < msgObj.currentUsers.length; userIndex+=1){
+        if(msgObj.currentUsers[userIndex]['Id'] !== user.Id){
+          userElem = $('<li>').append($('<a class="mdl-navigation__link" href="#">')).text(msgObj.currentUsers[userIndex].username);
+          $('.users-list').append(userElem);          
+        }
+      }      
+    }
     
-    
+    function appendMessageElem(msg, user){
+
+      var chatMainDiv = $('<div>').attr('class','mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid');
+      var chatTextDiv = $('<div>').attr('class', 'chat-msg-text').append($('<span>').text(msg));
+      var chatMetaDiv = $('<div>').attr('class', 'chat-msg-meta')
+      // if the message was user generated
+      if(user){
+        chatMetaDiv.append($('<span>').text(user.username));        
+      } else { // if the message was system generated
+        chatMetaDiv.append($('<span>').text('system'));
+      }
+
+      chatMainDiv.append([chatTextDiv, chatMetaDiv]);
+      $('#messages').append(chatMainDiv);
+    }
     
 });
